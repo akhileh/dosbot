@@ -1,0 +1,119 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "medbot",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "medTrack",
+                    "slots": [
+                        {
+                            "name": "date",
+                            "type": "AMAZON.DATE"
+                        },
+                        {
+                            "name": "pillcount",
+                            "type": "AMAZON.NUMBER"
+                        },
+                        {
+                            "name": "duration",
+                            "type": "AMAZON.DURATION"
+                        },
+                        {
+                            "name": "medication",
+                            "type": "medication"
+                        }
+                    ],
+                    "samples": [
+                        "my doctor has prescribed {medication}",
+                        "I need to take {medication}",
+                        "I need to take my meds every {duration}",
+                        "my dosage is {pillcount}",
+                        "start",
+                        "new",
+                        "make",
+                        "run"
+                    ]
+                },
+                {
+                    "name": "whatsMyMed",
+                    "slots": [],
+                    "samples": [
+                        "list",
+                        "What medications am I taking",
+                        "Whats my medication",
+                        "What is my medication"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "medication",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Aspirin",
+                                "synonyms": [
+                                    "aspirin"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ativan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Adderall"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Acetaminophen"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "whatsMyMed",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.1469805264822"
+                    },
+                    "slots": []
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Confirm.Intent.1469805264822",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Did you ask what medication you are taking"
+                    }
+                ]
+            }
+        ]
+    }
+}
