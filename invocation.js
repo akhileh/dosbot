@@ -41,6 +41,7 @@ function onIntent(intentRequest, session, callback) {
     if ("medTrack" === intentName) {
         setMedInSession(intent, session, callback);
     } else if ("whatsMyMed" === intentName) {
+        // console.warn("whatsMyMed triggered", intent);
         getMedFromSession(intent, session, callback);
     } else if ("AMAZON.HelpIntent" === intentName) {
         getWelcomeResponse(callback);
@@ -75,7 +76,7 @@ function getWelcomeResponse(callback) {
     // If we wanted to initialize the session to have some attributes we could add those here.
     var sessionAttributes = {};
     var cardTitle = "Welcome";
-    var speechOutput = "Welcome to Dosebot.  I’ll help you remember to take your medications and track your prescriptions." +
+    var speechOutput = "Welcome to Dosebot.  I’ll help you remember to take your medications and track your prescriptions. " +
                         "Do you want to get started?";
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
@@ -129,9 +130,10 @@ function getMedFromSession(intent, session, callback) {
 
     if (session.attributes) {
         medication = session.attributes.favoriteMedication;
+        console.warn("medication: ", medication);
     }
 
-    if (favoriteMed) {
+    if (medication) {
         speechOutput = "Your medication is " + medication + ". Goodbye.";
         shouldEndSession = true;
     } else {
