@@ -40,6 +40,8 @@ function onIntent(intentRequest, session, callback) {
     // Dispatch to your skill's intent handlers
     if ("medTrack" === intentName) {
         setMedInSession(intent, session, callback);
+    } else if ("timeTrack" === intentName) {
+        setTimeInSession(intent, session, callback);
     } else if ("whatsMyMed" === intentName) {
         // console.warn("whatsMyMed triggered", intent);
         getMedFromSession(intent, session, callback);
@@ -76,7 +78,7 @@ function getWelcomeResponse(callback) {
     // If we wanted to initialize the session to have some attributes we could add those here.
     var sessionAttributes = {};
     var cardTitle = "Welcome";
-    var speechOutput = "Welcome to Dosebot.  I’ll help you remember to take your medications and track your prescriptions. " +
+    var speechOutput = "Welcome to Medbot.  I’ll help you remember to take your medications and track your prescriptions. " +
                         "Do you want to get started?";
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
@@ -97,6 +99,32 @@ function createMedicationAttributes(favoriteMedication) {
 /**
  * Sets the color in the session and prepares the speech to reply to the user.
  */
+function setTimeInSession(intent, session, callback) {
+    var cardTitle = intent.name;
+    var favoriteMedication = intent.slots.medication;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = false;
+    var speechOutput = "";
+
+    if (favoriteMedication) {
+        var favoriteMedication = favoriteMedication.value;
+        sessionAttributes = createMedicationAttributes(favoriteMedication);
+        speechOutput = "I now know you need to take your meds every " + favoriteMedication + ". You can ask me " +
+            "how ofter you need to take your medication by saying, how often do I take my meds?";
+        repromptText = "You can ask me how ofter you need to take your medication by saying, how often do I take my meds?";
+    } else {
+        speechOutput = "I'm not sure what you said. Please try again";
+        repromptText = "You can tell me how often you take your meds by saying, I need to take my meds every 5 hours.";
+    }
+
+    callback(sessionAttributes,
+         buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+}
+
+/**
+ * Sets the color in the session and prepares the speech to reply to the user.
+ */
 function setMedInSession(intent, session, callback) {
     var cardTitle = intent.name;
     var favoriteMedication = intent.slots.medication;
@@ -110,7 +138,7 @@ function setMedInSession(intent, session, callback) {
         sessionAttributes = createMedicationAttributes(favoriteMedication);
         speechOutput = "I now know your medication is " + favoriteMedication + ". You can ask me " +
             "what your medication by saying, what's my medication?";
-        repromptText = "You can ask me what your medication by saying, what's my medication?";
+        repromptText = "You can ask me what your medication is by saying, what's my medication?";
     } else {
         speechOutput = "I'm not sure what your medication is. Please try again";
         repromptText = "I'm not sure what your medication is. You can tell me your " +
